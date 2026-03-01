@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-admin">
+<div class="page">
+
+    <!-- LOGIN PANEL -->
+    <div id="loginPanel">
+        <div class="login-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+        </div>
+        <h1>Admin Access</h1>
+        <p class="subtitle">Sign in to manage your portfolio projects.</p>
+
+        <div class="error-msg" id="loginError"></div>
+
+        <div class="field">
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-accent" id="loginBtn" onclick="doLogin()">Sign In</button>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel">
+        <a href="index.html" class="back-link">← Back to Portfolio</a>
+
+        <div class="admin-header">
+            <h1>Add Project</h1>
+            <div class="header-right">
+                <span class="user-badge" id="userBadge"></span>
+                <button class="btn-danger" onclick="doLogout()">Sign Out</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">New Entry</div>
+            <form id="adminForm">
+                <div class="field">
+                    <label>Project Name</label>
+                    <input type="text" id="title" placeholder="My Awesome Project" required>
+                </div>
+                <div class="field">
+                    <label>Description</label>
+                    <textarea id="desc" placeholder="Brief description..."></textarea>
+                </div>
+                <div class="field">
+                    <label>Category</label>
+                    <select id="category" onchange="toggleInputs()">
+                        <option value="Website">Website</option>
+                        <option value="App">App (Downloadable)</option>
+                    </select>
+                </div>
+
+                <!-- WEBSITE: URL only, live iframe preview is automatic -->
+                <div class="field" id="websiteInput">
+                    <label>Live URL</label>
+                    <input type="url" id="liveUrl" placeholder="https://example.com">
+                    <p style="font-size:0.75rem;color:#888;margin-top:0.4rem;">Preview is a live iframe of the site — no thumbnail needed.</p>
+                </div>
+
+                <!-- APP: thumbnail + file -->
+                <div class="grid2">
+                    <div class="field hidden" id="appThumbInput">
+                        <label>Thumbnail Image</label>
+                        <input type="file" id="thumbInput" accept="image/*">
+                    </div>
+                    <div class="field hidden" id="appFileInput">
+                        <label>App File (ZIP/PDF/EXE)</label>
+                        <input type="file" id="fileInput">
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">Publish Project</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script src="admin.js"></script>
+</body>
+</html>
