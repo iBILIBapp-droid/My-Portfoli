@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tools Directory — JRG Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --surface2: #1e1e1e;
+      --surface3: #252525;
+      --border: rgba(255, 255, 255, 0.07);
+      --border2: rgba(255, 255, 255, 0.13);
+      --text: #f0f0f0;
+      --text2: #888;
+      --text3: #444;
+      --accent: #e8ff6e;
+      --accent-fg: #0a0a0a;
+      --accent-dim: rgba(232, 255, 110, 0.08);
+      --accent-glow: rgba(232, 255, 110, 0.15);
+      --radius: 12px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Geist', sans-serif;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9000;
+    }
+
+    /* ── WRAPPER ── */
+    .directory-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 1rem;
+    }
+
+    .page-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .page-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .page-sub {
+      font-size: 0.85rem;
+      color: var(--text2);
+      line-height: 1.7;
+      margin-top: 0.9rem;
+      max-width: 440px;
+    }
+
+    /* ── CATEGORY TABS ── */
+    .cat-tabs-wrap {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cat-tabs-wrap::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0.7rem 1.1rem;
+      font-family: 'Geist', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text3);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+      margin-bottom: -1px;
+    }
+
+    .cat-tab:hover {
+      color: var(--text2);
+    }
+
+    .cat-tab.active {
+      color: var(--text);
+      border-bottom-color: var(--accent);
+    }
+
+    .cat-tab .tab-icon {
+      font-size: 0.9rem;
+    }
+
+    .cat-tab .tab-count {
+      font-size: 0.6rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.1rem 0.42rem;
+      color: var(--text3);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .cat-tab.active .tab-count {
+      background: var(--accent-dim);
+      border-color: rgba(232, 255, 110, 0.25);
+      color: var(--accent);
+    }
+
+    /* ── PANELS ── */
+    .cat-panel {
+      display: none;
+      padding-top: 1.8rem;
+    }
+
+    .cat-panel.active {
+      display: block;
+      animation: fadeUp 0.3s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* ── TOOLS GRID ── */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0.65rem;
+    }
+
+    /* ── TOOL CARD ── */
+    .tool-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-dim) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .tool-card:hover {
+      border-color: var(--border2);
+      background: #111;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .tool-card:hover::before {
+      opacity: 1;
+    }
+
+    /* icon */
+    .tool-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .tool-icon img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+
+    .tool-icon span {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    /* text */
+    .tool-info {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tool-name {
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 0.18rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tool-desc {
+      font-size: 0.71rem;
+      color: var(--text2);
+      line-height: 1.45;
+    }
+
+    /* arrow */
+    .tool-arrow {
+      flex-shrink: 0;
+      color: var(--text3);
+      font-size: 0.7rem;
+      transition: color 0.2s, transform 0.2s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tool-card:hover .tool-arrow {
+      color: var(--accent);
+      transform: translate(2px, -2px);
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 0.66rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 1rem;
+      margin-top: 0.2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="directory-wrap">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div class="page-eyebrow">Resource Directory</div>
+      <h1 class="page-title">AI Tools I<br><em>actually use.</em></h1>
+      <p class="page-sub">A curated collection of the best AI tools for content creation, organized by category.</p>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="cat-tabs-wrap">
+      <button class="cat-tab active" onclick="switchTab('audio', this)">
+        <span class="tab-icon">🎙</span> Audio <span class="tab-count">6</span>
+      </button>
+      <button class="cat-tab" onclick="switchTab('writing', this)">
+        <span class="tab-icon">✍️</span> Writing <span class="tab-count">6</span>
+      </button>
+      <button class="cat-tab" onclick="switchTab('design', this)">
+        <span class="tab-icon">🎨</span> Design <span class="tab-count">6</span>
+      </button>
+      <button class="cat-tab" onclick="switchTab('video', this)">
+        <span class="tab-icon">🎬</span> Video <span class="tab-count">6</span>
+      </button>
+      <button class="cat-tab" onclick="switchTab('ideas', this)">
+        <span class="tab-icon">⚡</span> Ideas <span class="tab-count">6</span>
+      </button>
+      <button class="cat-tab" onclick="switchTab('image', this)">
+        <span class="tab-icon">🖼</span> Image <span class="tab-count">6</span>
+      </button>
+      <button class="cat-tab" onclick="switchTab('avatars', this)">
+        <span class="tab-icon">🤖</span> Avatars <span class="tab-count">6</span>
+      </button>
+    </div>
+
+    <!-- ── 1. AUDIO ── -->
+    <div class="cat-panel active" id="panel-audio">
+      <div class="section-label">Audio Tools</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://elevenlabs.io" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🔊</span></div>
+          <div class="tool-info">
+            <div class="tool-name">ElevenLabs</div>
+            <div class="tool-desc">Simplest AI voice cloning and dubbing</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://murf.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🎤</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Murf AI</div>
+            <div class="tool-desc">AI voiceovers for videos</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://minimax.io" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>📊</span></div>
+          <div class="tool-info">
+            <div class="tool-name">MiniMax Audio</div>
+            <div class="tool-desc">High-quality AI speech synthesis</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://speechma.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>▶️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Speechma</div>
+            <div class="tool-desc">Simple AI text-to-speech</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://play.ht" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>📦</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Play HT</div>
+            <div class="tool-desc">AI voice generation platform</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://luvvoice.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🎵</span></div>
+          <div class="tool-info">
+            <div class="tool-name">LuvVoice</div>
+            <div class="tool-desc">Natural AI voice creation</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── 2. WRITING ── -->
+    <div class="cat-panel" id="panel-writing">
+      <div class="section-label">Writing Tools</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://chat.openai.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🤖</span></div>
+          <div class="tool-info">
+            <div class="tool-name">ChatGPT</div>
+            <div class="tool-desc">Conversational AI for writing and ideas</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://viralsky.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>📈</span></div>
+          <div class="tool-info">
+            <div class="tool-name">ViralSky</div>
+            <div class="tool-desc">AI thread writer trained on viral content</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://claude.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>✳️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Claude</div>
+            <div class="tool-desc">Long-form reasoning AI assistant</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://deepseek.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🔭</span></div>
+          <div class="tool-info">
+            <div class="tool-name">DeepSeek</div>
+            <div class="tool-desc">Advanced reasoning language model</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://qwen.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🌐</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Qwen</div>
+            <div class="tool-desc">Multilingual AI language model</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://gemini.google.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>💠</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Gemini</div>
+            <div class="tool-desc">Google's multimodal AI model</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── 3. DESIGN ── -->
+    <div class="cat-panel" id="panel-design">
+      <div class="section-label">Design Tools</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://skysnail.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🐌</span></div>
+          <div class="tool-info">
+            <div class="tool-name">SkySnail</div>
+            <div class="tool-desc">AI-powered thumbnail generator</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://canva.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🎨</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Canva</div>
+            <div class="tool-desc">Easy graphic design platform</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://figma.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🔧</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Figma</div>
+            <div class="tool-desc">Easy graphic thumbnail design platform</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://designs.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🤖</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Designs AI</div>
+            <div class="tool-desc">Created AI thumbnail design platform</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="#" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🧵</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Stitch</div>
+            <div class="tool-desc">Easy graphic design</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://gamma.app/" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🖌️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Gamma</div>
+            <div class="tool-desc">Powerful ppt generator tool</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── 4. VIDEO ── -->
+    <div class="cat-panel" id="panel-video">
+      <div class="section-label">Video Tools</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="#" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>▶️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Edits</div>
+            <div class="tool-desc">Quick video and image edits</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://capcut.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>✂️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">CapCut</div>
+            <div class="tool-desc">Simple video editing tool</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://picsart.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🅿️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Picsart</div>
+            <div class="tool-desc">Creative photo editing app</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://runwayml.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🛫</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Runway</div>
+            <div class="tool-desc">AI video generation and editing</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://kaiber.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🤖</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Kaiber AI</div>
+            <div class="tool-desc">AI-generated animated videos</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://klingai.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>⭕</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Kling AI</div>
+            <div class="tool-desc">High-quality AI video generation</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── 5. IDEAS ── -->
+    <div class="cat-panel" id="panel-ideas">
+      <div class="section-label">Ideas & Research</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://trends.google.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>📊</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Google Trends</div>
+            <div class="tool-desc">Track search trends</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://answersocrates.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🏛️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Answer Socrates</div>
+            <div class="tool-desc">Question-based keyword research</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://pinterest.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>📌</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Pinterest</div>
+            <div class="tool-desc">Visual inspiration platform</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://chat.openai.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>💬</span></div>
+          <div class="tool-info">
+            <div class="tool-name">ChatGPT</div>
+            <div class="tool-desc">Conversational AI for writing and ideas</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://reddit.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🔴</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Reddit</div>
+            <div class="tool-desc">Community-driven content research</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="#" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🚀</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Stratup</div>
+            <div class="tool-desc">Startup and idea discovery</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── 6. IMAGE ── -->
+    <div class="cat-panel" id="panel-image">
+      <div class="section-label">Image Generation</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://chat.openai.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🤖</span></div>
+          <div class="tool-info">
+            <div class="tool-name">ChatGPT</div>
+            <div class="tool-desc">ChatGPT's popular image model</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://nanobanana.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🍌</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Nano Banana</div>
+            <div class="tool-desc">AI image generation tool</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://gentube.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>▶️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">GenTube</div>
+            <div class="tool-desc">AI-generated visual content</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://ideogram.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🧠</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Ideogram</div>
+            <div class="tool-desc">AI images with text accuracy</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="#" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>⚡</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Z-Image</div>
+            <div class="tool-desc">Fast AI image creation</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://qwen.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🌐</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Qwen</div>
+            <div class="tool-desc">Multilingual AI language model</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── 7. AVATARS ── -->
+    <div class="cat-panel" id="panel-avatars">
+      <div class="section-label">Avatar & Presenter Tools</div>
+      <div class="tools-grid">
+        <a class="tool-card" href="https://descript.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🎛️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Descript</div>
+            <div class="tool-desc">Text-based audio and video editing</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://creatify.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>▶️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Creatify</div>
+            <div class="tool-desc">AI video ads generator</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://canva.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🎨</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Canva</div>
+            <div class="tool-desc">Simple avatars ready to use</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://heygen.com" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🎭</span></div>
+          <div class="tool-info">
+            <div class="tool-name">HeyGen</div>
+            <div class="tool-desc">AI avatar video creation</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://synthesia.io" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🖥️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Synthesia</div>
+            <div class="tool-desc">AI presenter video platform</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+        <a class="tool-card" href="https://jogg.ai" target="_blank" rel="noopener">
+          <div class="tool-icon"><span>🎙️</span></div>
+          <div class="tool-info">
+            <div class="tool-name">Jogg AI</div>
+            <div class="tool-desc">Simplest AI voice cloning and dubbing</div>
+          </div>
+          <div class="tool-arrow">↗</div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchTab(cat, btn) {
+      document.querySelectorAll('.cat-tab').forEach(function (b) { b.classList.remove('active'); });
+      document.querySelectorAll('.cat-panel').forEach(function (p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      var panel = document.getElementById('panel-' + cat);
+      if (panel) panel.classList.add('active');
+    }
+  </script>
+</body>
+
+</html>

@@ -11,6 +11,107 @@
         href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ── AI TOOLS SECTION ── */
+        .ai-tools-section {
+            padding: 6rem 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .ai-tools-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .ai-tools-banner {
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 3.5rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+            transition: border-color 0.3s;
+        }
+        .ai-tools-banner:hover {
+            border-color: rgba(255,255,255,0.25);
+        }
+        .ai-tools-banner::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 260px; height: 260px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(120,80,255,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .ai-tools-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 0.75rem;
+        }
+        .ai-tools-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+            line-height: 1.2;
+            color: #fff;
+            margin: 0 0 0.75rem;
+        }
+        .ai-tools-title em {
+            font-style: italic;
+            color: rgba(255,255,255,0.65);
+        }
+        .ai-tools-desc {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.5);
+            max-width: 480px;
+            line-height: 1.6;
+        }
+        .ai-tools-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #fff;
+            color: #080808;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 0.85rem 2rem;
+            border-radius: 100px;
+            text-decoration: none;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .ai-tools-cta:hover {
+            background: #e8e8e8;
+            transform: translateY(-1px);
+        }
+
+        /* Nav tools link badge */
+        .tools-link {
+            position: relative;
+        }
+        .tools-link::after {
+            content: 'NEW';
+            position: absolute;
+            top: -8px; right: -30px;
+            font-size: 0.48rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #a78bfa;
+            border: 1px solid #a78bfa;
+            border-radius: 3px;
+            padding: 1px 3px;
+            line-height: 1;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,6 +126,7 @@
         <div class="nav-links">
             <a href="#work">Work</a>
             <a href="#about">About</a>
+            <a href="#ai-tools" class="tools-link">Tools</a>
             <a href="#contact">Contact</a>
         </div>
         <div class="nav-right">
@@ -99,6 +201,23 @@
                 <div class="skeleton"></div>
                 <div class="skeleton"></div>
                 <div class="skeleton"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI TOOLS DIRECTORY -->
+    <section class="ai-tools-section" id="ai-tools">
+        <div class="ai-tools-inner">
+            <div class="ai-tools-banner">
+                <div>
+                    <div class="ai-tools-label">Free Resource</div>
+                    <h2 class="ai-tools-title">AI Tools<br><em>Directory</em></h2>
+                    <p class="ai-tools-desc">A curated collection of the best AI tools — categorized, searchable, and
+                        kept up to date. Find the right tool for the job.</p>
+                </div>
+                <a href="ai-tools-directory.html" class="ai-tools-cta">
+                    Browse Directory ↗
+                </a>
             </div>
         </div>
     </section>
@@ -183,7 +302,6 @@
                         </select>
                     </div>
 
-                    <!-- WEBSITE FIELDS: URL only, iframe preview is auto -->
                     <div id="websiteInput">
                         <div class="admin-field">
                             <label>Live URL</label>
@@ -192,7 +310,6 @@
                         </div>
                     </div>
 
-                    <!-- APP FIELDS: thumbnail + file -->
                     <div id="appFileInput" style="display:none">
                         <div class="admin-field">
                             <label>Thumbnail Image</label>
